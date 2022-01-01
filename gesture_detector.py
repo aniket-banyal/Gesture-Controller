@@ -2,6 +2,7 @@ import enum
 
 import mediapipe as mp
 
+from gesture import Gesture
 from model import KeyPointClassifier
 
 mp_hands = mp.solutions.hands
@@ -24,20 +25,6 @@ class Finger(enum.Enum):
     THUMB = 4
 
 
-class Gesture(enum.Enum):
-    OPEN = enum.auto()
-    FIST = enum.auto()
-    INDEX_UP = enum.auto()
-    FIRST_2 = enum.auto()
-    FIRST_3 = enum.auto()
-    V = enum.auto()
-    FRIST2_THUMB = enum.auto()
-    YO = enum.auto()
-    THUMBS_UP = enum.auto()
-    NONE = enum.auto()
-    L = enum.auto()
-
-
 class GestureDetector:
     def __init__(self, img_width, img_height) -> None:
         self.img_width = img_width
@@ -56,7 +43,7 @@ class GestureDetector:
         elif label == 'Index':
             return Gesture.INDEX_UP
         elif label == 'First2_thumb':
-            return Gesture.FRIST2_THUMB
+            return Gesture.FIRST2_THUMB
         elif label == 'V':
             return Gesture.V
         elif label == 'Thumbs_up':
