@@ -53,7 +53,7 @@ class MouseMoveThread(threading.Thread):
         self.point = point
 
     def run(self):
-        pyautogui.moveTo(self.point.x, self.point.y)
+        pyautogui.moveRel(self.point.x, self.point.y)
 
 
 class DragThread(threading.Thread):

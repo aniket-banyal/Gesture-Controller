@@ -7,11 +7,10 @@ from hand_detector import HandDetector
 
 width, height = 640, 480
 
-bound_rect = 150
 mouse_move_smoothening_factor = 4
 
 hand_detector = HandDetector(min_detection_confidence=0.3, min_tracking_confidence=0.3)
-gesture_controller = GestureController(width, height, bound_rect, mouse_move_smoothening_factor)
+gesture_controller = GestureController(width, height, mouse_move_smoothening_factor)
 
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
@@ -26,8 +25,6 @@ while cap.isOpened():
         continue
 
     image, results = hand_detector.find_hands(debug_image)
-
-    cv2.rectangle(image, (bound_rect, bound_rect), (width - bound_rect, height-bound_rect), (255, 0, 0), 2)
 
     if results.multi_hand_landmarks:
         for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):

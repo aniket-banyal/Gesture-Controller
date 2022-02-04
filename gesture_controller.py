@@ -42,10 +42,9 @@ class Mode(enum.Enum):
 
 
 class GestureController:
-    def __init__(self, img_width, img_height, bound_rect=150, mouse_move_smoothening_factor=3, scroll_smoothening_factor=3, scroll_speed=500, scroll_threshold=15):
+    def __init__(self, img_width, img_height, mouse_move_smoothening_factor=3, scroll_smoothening_factor=3, scroll_speed=500, scroll_threshold=15):
         self.img_width = img_width
         self.img_height = img_height
-        self.bound_rect = bound_rect
 
         self.gesture_detector = GestureDetector(img_width, img_height)
         self.prev_command = None
@@ -140,13 +139,6 @@ class GestureController:
         coords = landmarks[fingers[finger.value]]
         return Point(int(coords.x * self.img_width), int(coords.y * self.img_height))
 
-    def get_mouse_coords_from_landmark_coords_bound_rect(self, point):
-        screen_width, screen_height = pyautogui.size()
-
-        x = np.interp(point.x, (self.bound_rect, self.img_width - self.bound_rect), (0, screen_width))
-        y = np.interp(point.y, (self.bound_rect, self.img_height - self.bound_rect), (0, screen_height))
-        return Point(x, y)
-
     def get_mouse_coords_from_landmark_coords(self, point):
         screen_width, screen_height = pyautogui.size()
 
@@ -164,7 +156,7 @@ class GestureController:
             return
 
         coords = self.get_finger_world_coords(Finger.INDEX, landmarks)
-        mouse_coords = self.get_mouse_coords_from_landmark_coords_bound_rect(coords)
+        mouse_coords = self.get_mouse_coords_from_landmark_coords(coords)
 
         if self.prev_mouse_pos.x is None:
             self.prev_mouse_pos = Point(mouse_coords.x, mouse_coords.y)
@@ -178,7 +170,7 @@ class GestureController:
         curr_mouse_pos = Point(curr_x, curr_y)
         self.prev_mouse_pos = curr_mouse_pos
 
-        thread = MouseMoveThread(curr_mouse_pos)
+        thread = MouseMoveThread(Point(curr_x - prev_x, curr_y-prev_y))
         thread.start()
 
     def handle_switching_mode(self, curr_command):
