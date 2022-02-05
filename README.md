@@ -52,6 +52,8 @@ This program allows you to control your computer using hand gestures
 `Mediapipe` is used to extract hand landmarks from this image.  
 `GestureDetector` uses a deep learning model to classify gesture based on hand landmarks.  
 `GestureController` executes the command corresponding to that gesture.
+
+`model` folder contains the files of deep learning model used for gesture classification.  
  
 ## Getting Started
 
