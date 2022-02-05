@@ -16,26 +16,29 @@ cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
-while cap.isOpened():
-    success, image = cap.read()
-    debug_image = copy.deepcopy(cv2.flip(image, 1))
 
-    if not success:
-        print("Ignoring empty camera frame.")
-        continue
+def main():
+    while cap.isOpened():
+        success, image = cap.read()
 
-    image, results = hand_detector.find_hands(debug_image)
+        if not success:
+            print("Ignoring empty camera frame.")
+            continue
 
-    if results.multi_hand_landmarks:
-        for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
-            landmarks = hand_landmarks.landmark
+        image, results = hand_detector.find_hands(cv2.flip(image, 1))
 
-            gesture_controller.run(landmarks, handedness)
+        if results.multi_hand_landmarks:
+            for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
+                landmarks = hand_landmarks.landmark
+                gesture_controller.run(landmarks, handedness)
 
-    cv2.imshow('MediaPipe Hands', image)
+        cv2.imshow('Gesture Controller', image)
 
-    if cv2.waitKey(5) & 0xFF == 27:
-        break
+        if cv2.waitKey(5) & 0xFF == 27:
+            break
 
-cap.release()
-cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
+
+
+main()

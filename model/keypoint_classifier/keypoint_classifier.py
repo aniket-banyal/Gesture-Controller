@@ -6,6 +6,8 @@ import tensorflow as tf
 
 
 class KeyPointClassifier(object):
+    PROBABILITY_THRESHOLD = 0.2
+
     def __init__(
         self,
         img_width,
@@ -42,7 +44,7 @@ class KeyPointClassifier(object):
         result_index = np.argmax(np.squeeze(result))
         probability = result[result_index]
 
-        if probability < 0.2:
+        if probability < self.PROBABILITY_THRESHOLD:
             result_index == -1
 
         return self.get_gesture_label(result_index)
