@@ -1,5 +1,3 @@
-import copy
-
 import cv2
 
 from gesture_controller import GestureController
